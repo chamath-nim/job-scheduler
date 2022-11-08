@@ -50,6 +50,8 @@ public class SRService {
     Logger logger = LoggerFactory.getLogger(SRService.class);
 
     public void mainTask(){
+        deleteAllJobs();
+
         job1();
         job2();
         job3();
@@ -84,7 +86,7 @@ public class SRService {
 
             Trigger trigger = newTrigger()
                     .withIdentity(job.getKey().getName(), "group1")
-                    .withDescription("sample1")
+                    .withDescription("msg count 0")
                     .withSchedule(cronSchedule(" */30 * * * * ?"))
                     .forJob(job)
                     .build();
@@ -104,7 +106,7 @@ public class SRService {
 
             Trigger trigger = newTrigger()
                     .withIdentity(job.getKey().getName(), "group2")
-                    .withDescription("sample2")
+                    .withDescription("msg count 1")
                     .withSchedule(cronSchedule(" */30 * * * * ?"))
                     .forJob(job)
                     .build();
@@ -124,7 +126,7 @@ public class SRService {
 
             Trigger trigger = newTrigger()
                     .withIdentity(job.getKey().getName(), "group3")
-                    .withDescription("sample3")
+                    .withDescription("msg count 2")
                     .withSchedule(cronSchedule(" */30 * * * * ?"))
                     .forJob(job)
                     .build();
