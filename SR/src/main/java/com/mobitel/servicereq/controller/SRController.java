@@ -54,7 +54,7 @@ public class SRController {
         return ResponseEntity.ok("Successfully added");
     }
 
-    @PostMapping("/get-fired-jobs")
+    @GetMapping ("/get-fired-jobs")
     public ResponseEntity<List<JobDetails>> getFiredJobs(@RequestParam int count){
         return ResponseEntity.ok().body(srService.getFiredJobs(count));
     }
