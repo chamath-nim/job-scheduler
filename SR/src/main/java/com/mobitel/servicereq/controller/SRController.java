@@ -61,6 +61,6 @@ public class SRController {
 
     @GetMapping("/get")
     public ResponseEntity<String> getApiTest(){
-        return ResponseEntity.ok("test pass fine");
+        return ResponseEntity.ok("test pass 1234");
     }
 }
