@@ -121,9 +121,14 @@ public class ServiceRequestService {
     public ResponseHandler<ServiceRequestsDTO> addRequst(RequestHandler<ServiceRequestsDTO> serviceRequestsDTORequestHandler){
         ResponseHandler<ServiceRequestsDTO> serviceRequestsDTOResponseHandler = new ResponseHandler<>();
 
-        System.out.println(serviceRequestsDTORequestHandler);
         ServiceRequests serviceRequests = modelMapper.map(serviceRequestsDTORequestHandler.getBody(), ServiceRequests.class);
-        serviceRequests.setSR_CREATED_ON(CurrentDateTime());
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime commit = LocalDateTime.now().plusHours(24);
+
+        serviceRequests.setSr_CREATED_ON(format.format(now));
+        serviceRequests.setSr_COMMITED_DATE(format.format(commit));
         serviceRequestRepo.save(serviceRequests);
 
         serviceRequestsDTOResponseHandler.setBody(modelMapper.map(serviceRequests,ServiceRequestsDTO.class));
@@ -195,13 +200,6 @@ public class ServiceRequestService {
         mainJobsDTOResponseHandler.setParaList(mainJobsDTOList);
 
         return mainJobsDTOResponseHandler ;
-    }
-
-
-    public String CurrentDateTime(){
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        return format.format(now);
     }
 
     public String ConvetMilliSecToDate(long milliSec){

@@ -22,7 +22,7 @@ public class ServiceRequests {
     private int NOTIFY_COUNT;
 
     @Column(name = "SR_AREA")
-    private String SR_AREA;
+    private String sr_AREA;
 
 //    @Column(name = "SR_ASSIGN_NOTIFY")
 //    private int SR_ASSIGN_NOTIFY;
@@ -31,19 +31,19 @@ public class ServiceRequests {
 //    private String SR_CAT_TYPE;
 
     @Column(name = "SR_CLOSED_BY")
-    private String SR_CLOSED_BY;
+    private String sr_CLOSED_BY;
 
     @Column(name = "SR_CLOSED_ON")
-    private String SR_CLOSED_ON;
+    private String sr_CLOSED_ON;
 
 //    @Column(name = "SR_CLOSING_COMMENT")
 //    private String SR_CLOSING_COMMENT;
 
     @Column(name = "SR_CREATED_BY")
-    private String SR_CREATED_BY;
+    private String sr_CREATED_BY;
 
     @Column(name = "SR_CREATED_ON")
-    private String SR_CREATED_ON;
+    private String sr_CREATED_ON;
 
 //    @Column(name = "SR_CUST_NOTIFY_CLOSE")
 //    private int SR_CUST_NOTIFY_CLOSE;
@@ -79,13 +79,13 @@ public class ServiceRequests {
 //    private String SR_LAST_UPDATED_ON;
 //
     @Column(name = "SR_MOBILE_NO")
-    private String SR_MOBILE_NO;
+    private String sr_MOBILE_NO;
 
 //    @Column(name = "SR_NON_FTR")
 //    private int SR_NON_FTR;
 
     @Column(name = "SR_NOTIFICATION_EMAIL")
-    private String SR_NOTIFICATION_EMAIL;
+    private String sr_NOTIFICATION_EMAIL;
 
 //    @Column(name = "SR_NOTIFICATION_EMAIL_FLAG")
 //    private int SR_NOTIFICATION_EMAIL_FLAG;
@@ -100,10 +100,10 @@ public class ServiceRequests {
 //    private String SR_OPENING_COMMENT;
 
     @Column(name = "SR_OWNER")
-    private String sr_owner;
+    private String sr_OWNER;
 
     @Column(name = "SR_OWNER_GROUP")
-    private String SR_OWNER_GROUP;
+    private String sr_OWNER_GROUP;
 
 //    @Column(name = "SR_PRIORITY")
 //    private String SR_PRIORITY;
@@ -121,13 +121,16 @@ public class ServiceRequests {
 //    private String SR_SOURCE;
 
     @Column(name = "SR_STATUS")
-    private String SR_STATUS;
+    private String sr_STATUS;
 
 //    @Column(name = "SR_SUB_AREA")
 //    private String SR_SUB_AREA;
 
     @Column(name = "SR_SUB_STATUS")
-    private String SR_SUB_STATUS;
+    private String sr_SUB_STATUS;
+
+    @Column(name = "SR_COMMITED_DATE")
+    private String sr_COMMITED_DATE;
 
 //    @Column(name = "SR_WEIGHTAGE_FACTOR")
 //    private String SR_WEIGHTAGE_FACTOR;

@@ -81,6 +81,8 @@ public class ServiceRequestsDTO {
 
     private String sr_SUB_STATUS;
 
+    private String sr_COMMITED_DATE;
+
 //    private String SR_WEIGHTAGE_FACTOR;
 
 }

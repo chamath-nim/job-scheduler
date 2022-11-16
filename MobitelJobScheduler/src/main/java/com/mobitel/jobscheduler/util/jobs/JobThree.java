@@ -72,7 +72,7 @@ public class JobThree extends QuartzJobBean{
         if (requests.size() == 0) logger.info("There is no in-progress requests in for job 3");
         else {
             for (ServiceRequests sr : requests) {
-                LocalDateTime dateTime = LocalDateTime.parse(sr.getSR_CREATED_ON(), formatter);
+                LocalDateTime dateTime = LocalDateTime.parse(sr.getSr_CREATED_ON(), formatter);
 
                 LocalDateTime nextDateTime = dateTime.plusMinutes(5);
                 ZonedDateTime zonedDateTime = nextDateTime.atZone(zoneId);
