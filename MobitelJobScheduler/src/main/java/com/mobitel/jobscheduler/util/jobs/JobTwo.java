@@ -65,7 +65,7 @@ public class JobTwo extends QuartzJobBean {
         else {
             System.out.println("reqsize "+requests.size());
             for (ServiceRequests sr : requests) {
-                LocalDateTime dateTime = LocalDateTime.parse(sr.getRequestTime(), formatter);
+                LocalDateTime dateTime = LocalDateTime.parse(sr.getSR_CREATED_ON(), formatter);
 
                 LocalDateTime nextDateTime = dateTime.plusMinutes(3);
                 ZonedDateTime zonedDateTime = nextDateTime.atZone(zoneId);
@@ -74,11 +74,11 @@ public class JobTwo extends QuartzJobBean {
 
                 if (checking.compareTo(zonedDateTime) > 0) {
 
-                    FiredJobs jobDetails = firedJobsRepo.getByJobId(sr.getId(),2);
+                    FiredJobs jobDetails = firedJobsRepo.getByJobId(sr.getID(),2);
                     jobDetails.setActualStartTime(CurrentDateTime());
 
-                    logger.info("job2 "+sr.getId());
-                    sr.setNotifyCount(2);
+                    logger.info("job2 "+sr.getID());
+                    sr.setNOTIFY_COUNT(2);
                     serviceRequestRepo.save(sr);
 
                     jobDetails.setStatus("Success");
@@ -87,9 +87,9 @@ public class JobTwo extends QuartzJobBean {
                     firedJobsRepo.save(jobDetails);
                 }
                 else {
-                    if(firedJobsRepo.checkExist(sr.getId(), 2)==0) {
+                    if(firedJobsRepo.checkExist(sr.getID(), 2)==0) {
                         FiredJobs firedJobs = new FiredJobs();
-                        firedJobs.setServiceRequestId(sr.getId());
+                        firedJobs.setServiceRequestId(sr.getID());
                         firedJobs.setNotifyCount(2);
                         firedJobs.setStartTime(nextDateTime.format(formatter));
                         firedJobs.setStatus("Queued");

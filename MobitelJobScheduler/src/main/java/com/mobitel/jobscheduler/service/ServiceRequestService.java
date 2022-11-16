@@ -121,8 +121,9 @@ public class ServiceRequestService {
     public ResponseHandler<ServiceRequestsDTO> addRequst(RequestHandler<ServiceRequestsDTO> serviceRequestsDTORequestHandler){
         ResponseHandler<ServiceRequestsDTO> serviceRequestsDTOResponseHandler = new ResponseHandler<>();
 
+        System.out.println(serviceRequestsDTORequestHandler);
         ServiceRequests serviceRequests = modelMapper.map(serviceRequestsDTORequestHandler.getBody(), ServiceRequests.class);
-        serviceRequests.setRequestTime(CurrentDateTime());
+        serviceRequests.setSR_CREATED_ON(CurrentDateTime());
         serviceRequestRepo.save(serviceRequests);
 
         serviceRequestsDTOResponseHandler.setBody(modelMapper.map(serviceRequests,ServiceRequestsDTO.class));

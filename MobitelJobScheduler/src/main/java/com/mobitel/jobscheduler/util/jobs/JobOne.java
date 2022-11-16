@@ -35,18 +35,16 @@ public class JobOne extends QuartzJobBean {
 
         List<ServiceRequests> requests = serviceRequestRepo.findEligibleServiceRequests(0);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
         if (requests.size() == 0) logger.info("There is no in-progress requests in for job 1");
         else {
             for (ServiceRequests sr : requests) {
 
-                logger.info("job1 "+sr.getId());
-                sr.setNotifyCount(1);
+                logger.info("job1 "+sr.getID());
+                sr.setNOTIFY_COUNT(1);
                 serviceRequestRepo.save(sr);
 
                 FiredJobs firedJobs = new FiredJobs();
-                firedJobs.setServiceRequestId(sr.getId());
+                firedJobs.setServiceRequestId(sr.getID());
                 firedJobs.setNotifyCount(1);
                 firedJobs.setStartTime(CurrentDateTime());
                 firedJobs.setStatus("Success");

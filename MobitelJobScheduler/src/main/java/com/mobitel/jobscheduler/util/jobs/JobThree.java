@@ -72,7 +72,7 @@ public class JobThree extends QuartzJobBean{
         if (requests.size() == 0) logger.info("There is no in-progress requests in for job 3");
         else {
             for (ServiceRequests sr : requests) {
-                LocalDateTime dateTime = LocalDateTime.parse(sr.getRequestTime(), formatter);
+                LocalDateTime dateTime = LocalDateTime.parse(sr.getSR_CREATED_ON(), formatter);
 
                 LocalDateTime nextDateTime = dateTime.plusMinutes(5);
                 ZonedDateTime zonedDateTime = nextDateTime.atZone(zoneId);
@@ -81,11 +81,11 @@ public class JobThree extends QuartzJobBean{
 
                 if (checking.compareTo(zonedDateTime) > 0) {
 
-                    FiredJobs firedJobs = firedJobsRepo.getByJobId(sr.getId(),3);
+                    FiredJobs firedJobs = firedJobsRepo.getByJobId(sr.getID(),3);
                     firedJobs.setActualStartTime(CurrentDateTime());
 
-                    logger.info("job3 "+sr.getId());
-                    sr.setNotifyCount(3);
+                    logger.info("job3 "+sr.getID());
+                    sr.setNOTIFY_COUNT(3);
                     serviceRequestRepo.save(sr);
 
                     firedJobs.setStatus("Success");
@@ -95,10 +95,10 @@ public class JobThree extends QuartzJobBean{
                     firedJobsRepo.save(firedJobs);
                 }
                 else {
-                    if(firedJobsRepo.checkExist(sr.getId(), 3)==0) {
-                        System.out.println(firedJobsRepo.checkExist(sr.getId(),3));
+                    if(firedJobsRepo.checkExist(sr.getID(), 3)==0) {
+                        System.out.println(firedJobsRepo.checkExist(sr.getID(),3));
                         FiredJobs firedJobs = new FiredJobs();
-                        firedJobs.setServiceRequestId(sr.getId());
+                        firedJobs.setServiceRequestId(sr.getID());
                         firedJobs.setNotifyCount(3);
                         firedJobs.setStartTime(nextDateTime.format(formatter));
                         firedJobs.setStatus("Queued");
