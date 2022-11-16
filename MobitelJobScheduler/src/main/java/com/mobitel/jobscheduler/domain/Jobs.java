@@ -3,11 +3,13 @@ package com.mobitel.jobscheduler.domain;
 import lombok.Data;
 
 @Data
-public class JobDetails {
+public class Jobs {
 
-    private String schedulerName;
+    private String triggerName;
+    private String triggerGroup;
     private String jobName;
     private String jobGroup;
     private String description;
     private String jobClassName;
+    private String cronExpression;
 }

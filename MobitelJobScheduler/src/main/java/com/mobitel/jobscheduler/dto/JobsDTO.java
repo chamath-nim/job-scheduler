@@ -2,7 +2,7 @@ package com.mobitel.jobscheduler.dto;
 
 import lombok.Data;
 @Data
-public class JobDTO {
+public class JobsDTO {
 
     private String triggerName;
     private String triggerGroup;
@@ -11,12 +11,4 @@ public class JobDTO {
     private String description;
     private String jobClassName;
     private String cronExpression;
-
-    private Long firedJobId;
-    private Long ServiceRequestId;
-    private String status;
-    private String actualStartTime;
-    private String endTime;
-    private String startTime;
-    private int notifyCount;
 }

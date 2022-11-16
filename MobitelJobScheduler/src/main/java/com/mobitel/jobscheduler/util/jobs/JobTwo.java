@@ -1,5 +1,9 @@
 package com.mobitel.jobscheduler.util.jobs;
 
+import com.mobitel.jobscheduler.domain.FiredJobs;
+import com.mobitel.jobscheduler.domain.ServiceRequests;
+import com.mobitel.jobscheduler.repository.FiredJobsRepo;
+import com.mobitel.jobscheduler.repository.ServiceRequestRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -14,15 +18,18 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Slf4j
 public class JobTwo extends QuartzJobBean {
 
     @Autowired
-    private SRRepo srRepo;
+    private ServiceRequestRepo serviceRequestRepo;
+
     @Autowired
     private FiredJobsRepo firedJobsRepo;
+
     @Autowired
     private Scheduler scheduler;
 
@@ -31,7 +38,7 @@ public class JobTwo extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) {
 
-        List<SR> requests = new ArrayList<>();
+        List<ServiceRequests> requests = new ArrayList<>();
 
         try {
             Trigger.TriggerState state = Trigger.TriggerState.NORMAL;
@@ -39,13 +46,13 @@ public class JobTwo extends QuartzJobBean {
                 state = scheduler.getTriggerState(triggerKey);
             }
             if (state.equals(Trigger.TriggerState.PAUSED)){
-                List<SR> req1 = srRepo.findAllRequests1(0);
-                List<SR> req2 = srRepo.findAllRequests2();
+                List<ServiceRequests> req1 = serviceRequestRepo.findEligibleServiceRequests(0);
+                List<ServiceRequests> req2 = serviceRequestRepo.findEligibleServiceRequests(1);
 
                 requests.addAll(req1);
                 requests.addAll(req2);
             }
-            else requests = srRepo.findAllRequests2();
+            else requests = serviceRequestRepo.findEligibleServiceRequests(1);
 
         } catch (SchedulerException e) {
             logger.error(String.valueOf(e));
@@ -57,7 +64,7 @@ public class JobTwo extends QuartzJobBean {
         if (requests.size() == 0) logger.info("There is no in-progress requests in for job 2");
         else {
             System.out.println("reqsize "+requests.size());
-            for (SR sr : requests) {
+            for (ServiceRequests sr : requests) {
                 LocalDateTime dateTime = LocalDateTime.parse(sr.getRequestTime(), formatter);
 
                 LocalDateTime nextDateTime = dateTime.plusMinutes(3);
@@ -67,12 +74,12 @@ public class JobTwo extends QuartzJobBean {
 
                 if (checking.compareTo(zonedDateTime) > 0) {
 
-                    JobDetails jobDetails = firedJobsRepo.getByJobId(sr.getId(),2);
+                    FiredJobs jobDetails = firedJobsRepo.getByJobId(sr.getId(),2);
                     jobDetails.setActualStartTime(CurrentDateTime());
 
                     logger.info("job2 "+sr.getId());
                     sr.setNotifyCount(2);
-                    srRepo.save(sr);
+                    serviceRequestRepo.save(sr);
 
                     jobDetails.setStatus("Success");
                     jobDetails.setEndTime(CurrentDateTime());
@@ -81,13 +88,13 @@ public class JobTwo extends QuartzJobBean {
                 }
                 else {
                     if(firedJobsRepo.checkExist(sr.getId(), 2)==0) {
-                        JobDetails jobDetails = new JobDetails();
-                        jobDetails.setJobId(sr.getId());
-                        jobDetails.setNotifyCount(2);
-                        jobDetails.setStartTime(nextDateTime.format(formatter));
-                        jobDetails.setStatus("Queued");
+                        FiredJobs firedJobs = new FiredJobs();
+                        firedJobs.setServiceRequestId(sr.getId());
+                        firedJobs.setNotifyCount(2);
+                        firedJobs.setStartTime(nextDateTime.format(formatter));
+                        firedJobs.setStatus("Queued");
 
-                        firedJobsRepo.save(jobDetails);
+                        firedJobsRepo.save(firedJobs);
                     }
                 }
             }

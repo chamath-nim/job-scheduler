@@ -14,5 +14,7 @@ public class CommonUrl {
 
     public static final String addRequst = "/add/sr";
 
+    public static final String addJob = "/add/job";
+
     public static final String getFiredJobs = "/get-fired-jobs";
 }

@@ -1,7 +1,10 @@
 package com.mobitel.jobscheduler.controller;
 
 import com.mobitel.jobscheduler.CommonUrl;
-import com.mobitel.jobscheduler.dto.JobDTO;
+import com.mobitel.jobscheduler.dto.FiredJobsDTO;
+import com.mobitel.jobscheduler.dto.JobsDTO;
+import com.mobitel.jobscheduler.dto.MainJobsDTO;
+import com.mobitel.jobscheduler.dto.ServiceRequestsDTO;
 import com.mobitel.jobscheduler.service.MainJobsService;
 import com.mobitel.jobscheduler.service.ServiceRequestService;
 import com.mobitel.jobscheduler.util.generic.RequestHandler;
@@ -21,17 +24,12 @@ public class JobController {
     }
 
     @GetMapping(CommonUrl.getAllMainJobs)
-//    public ResponseHandler<JobDTO> getAllMainJobs(){
-//        try{
-//
-//        }
-//        catch (){
-//
-//        }
-//    }
+    public ResponseHandler<MainJobsDTO> getAllMainJobs(){
+        return serviceRequestService.getJobs();
+    }
 
     @PostMapping(CommonUrl.deleteJob)
-    public ResponseHandler<String> deleteJob(@RequestBody RequestHandler<JobDTO> jobDTORequestHandler){
+    public ResponseHandler<String> deleteJob(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
         return serviceRequestService.deleteJob(jobDTORequestHandler);
     }
 
@@ -41,28 +39,33 @@ public class JobController {
     }
 
     @PostMapping(CommonUrl.pauseTrigger)
-    public ResponseHandler<String> pauseTrigger(@RequestBody RequestHandler<JobDTO> jobDTORequestHandler){
+    public ResponseHandler<String> pauseTrigger(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
         return serviceRequestService.pauseTrigger(jobDTORequestHandler);
     }
 
     @PostMapping(CommonUrl.resumeTrigger)
-    public ResponseHandler<String> resumeTrigger(@RequestBody RequestHandler<JobDTO> jobDTORequestHandler){
+    public ResponseHandler<String> resumeTrigger(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
         return serviceRequestService.resumeTrigger(jobDTORequestHandler);
 
     }
 
-    @PostMapping(CommonUrl.addRequst)
-    public ResponseHandler<String> addRequst(@RequestBody RequestHandler<JobDTO> jobDTORequestHandler){
+    @PostMapping(CommonUrl.addJob)
+    public ResponseHandler<String> addJob(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
         return mainJobsService.mainScheduler(jobDTORequestHandler);
     }
 
+    @PostMapping(CommonUrl.addRequst)
+    public ResponseHandler<ServiceRequestsDTO> addRequest(@RequestBody RequestHandler<ServiceRequestsDTO> serviceRequestsDTORequestHandler){
+        return serviceRequestService.addRequst(serviceRequestsDTORequestHandler);
+    }
+
     @GetMapping (CommonUrl.getFiredJobs)
-    public ResponseEntity<List<JobDetails>> getFiredJobs(@RequestParam int count){
-        return ResponseEntity.ok().body(srService.getFiredJobs(count));
+    public ResponseHandler<FiredJobsDTO> getFiredJobs(@RequestParam int count){
+        return serviceRequestService.getFiredJobs(count);
     }
 
     @GetMapping("/get")
     public ResponseEntity<String> getApiTest(){
-        return ResponseEntity.ok("test pass 1234");
+        return ResponseEntity.ok("test pass hooo!");
     }
 }
