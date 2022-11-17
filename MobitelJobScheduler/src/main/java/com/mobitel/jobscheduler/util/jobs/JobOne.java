@@ -39,6 +39,7 @@ public class JobOne extends QuartzJobBean {
         else {
             for (ServiceRequests sr : requests) {
 
+                //business logic
                 logger.info("job1 "+sr.getID());
                 sr.setNOTIFY_COUNT(1);
                 serviceRequestRepo.save(sr);

@@ -2,6 +2,8 @@ package com.mobitel.jobscheduler.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ServiceRequestsDTO {
 
@@ -17,13 +19,13 @@ public class ServiceRequestsDTO {
 
     private String sr_CLOSED_BY;
 
-    private String sr_CLOSED_ON;
+    private LocalDateTime sr_CLOSED_ON;
 
 //    private String SR_CLOSING_COMMENT;
 
     private String sr_CREATED_BY;
 
-    private String sr_CREATED_ON;
+    private LocalDateTime sr_CREATED_ON;
 
 //    private int SR_CUST_NOTIFY_CLOSE;
 //
@@ -81,7 +83,7 @@ public class ServiceRequestsDTO {
 
     private String sr_SUB_STATUS;
 
-    private String sr_COMMITED_DATE;
+    private LocalDateTime sr_COMMITED_DATE;
 
 //    private String SR_WEIGHTAGE_FACTOR;
 

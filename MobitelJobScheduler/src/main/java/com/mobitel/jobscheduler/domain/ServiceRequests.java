@@ -3,6 +3,7 @@ package com.mobitel.jobscheduler.domain;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,7 +35,7 @@ public class ServiceRequests {
     private String sr_CLOSED_BY;
 
     @Column(name = "SR_CLOSED_ON")
-    private String sr_CLOSED_ON;
+    private LocalDateTime sr_CLOSED_ON;
 
 //    @Column(name = "SR_CLOSING_COMMENT")
 //    private String SR_CLOSING_COMMENT;
@@ -43,7 +44,7 @@ public class ServiceRequests {
     private String sr_CREATED_BY;
 
     @Column(name = "SR_CREATED_ON")
-    private String sr_CREATED_ON;
+    private LocalDateTime sr_CREATED_ON;
 
 //    @Column(name = "SR_CUST_NOTIFY_CLOSE")
 //    private int SR_CUST_NOTIFY_CLOSE;
@@ -130,7 +131,7 @@ public class ServiceRequests {
     private String sr_SUB_STATUS;
 
     @Column(name = "SR_COMMITED_DATE")
-    private String sr_COMMITED_DATE;
+    private LocalDateTime sr_COMMITED_DATE;
 
 //    @Column(name = "SR_WEIGHTAGE_FACTOR")
 //    private String SR_WEIGHTAGE_FACTOR;

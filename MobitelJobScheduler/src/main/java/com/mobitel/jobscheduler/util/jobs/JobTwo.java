@@ -65,7 +65,7 @@ public class JobTwo extends QuartzJobBean {
         else {
             System.out.println("reqsize "+requests.size());
             for (ServiceRequests sr : requests) {
-                LocalDateTime dateTime = LocalDateTime.parse(sr.getSr_CREATED_ON(), formatter);
+                LocalDateTime dateTime = sr.getSr_CREATED_ON();
 
                 LocalDateTime nextDateTime = dateTime.plusMinutes(3);
                 ZonedDateTime zonedDateTime = nextDateTime.atZone(zoneId);

@@ -124,11 +124,9 @@ public class ServiceRequestService {
         ServiceRequests serviceRequests = modelMapper.map(serviceRequestsDTORequestHandler.getBody(), ServiceRequests.class);
 
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime commit = LocalDateTime.now().plusHours(24);
 
-        serviceRequests.setSr_CREATED_ON(format.format(now));
-        serviceRequests.setSr_COMMITED_DATE(format.format(commit));
+        serviceRequests.setSr_CREATED_ON(LocalDateTime.now());
+        serviceRequests.setSr_COMMITED_DATE(LocalDateTime.now().plusHours(24));
         serviceRequestRepo.save(serviceRequests);
 
         serviceRequestsDTOResponseHandler.setBody(modelMapper.map(serviceRequests,ServiceRequestsDTO.class));
@@ -168,7 +166,15 @@ public class ServiceRequestService {
 
                         mainJobs.setNextFireTime(ConvetMilliSecToDate(trigger.getNextFireTime().getTime()));
 
-                        mainJobs.setPreviousFireTime(ConvetMilliSecToDate(trigger.getPreviousFireTime().getTime()));
+                        Date preTime;
+                        try {
+                            preTime = ConvetMilliSecToDate(trigger.getPreviousFireTime().getTime());
+                        }
+                        catch (NullPointerException e){
+                            preTime = null;
+                        }
+
+                        mainJobs.setPreviousFireTime(preTime);
 
                         mainJobs.setStartTime(ConvetMilliSecToDate(trigger.getStartTime().getTime()));
 
@@ -183,7 +189,7 @@ public class ServiceRequestService {
                         }
                         else {
                             mainJobs.setCronExpression("");
-                            mainJobs.setTriggerType("Simle");
+                            mainJobs.setTriggerType("Simple");
                         }
                         mainJobs.setJobClassName(String.valueOf(scheduler.getJobDetail(trigger.getJobKey()).getJobClass()));
                     }
@@ -202,8 +208,7 @@ public class ServiceRequestService {
         return mainJobsDTOResponseHandler ;
     }
 
-    public String ConvetMilliSecToDate(long milliSec){
-        Date res = new Date(milliSec);
-        return res.toString();
+    public Date ConvetMilliSecToDate(Long milliSec){
+        return new Date(milliSec);
     }
 }
