@@ -2,12 +2,14 @@ package com.mobitel.jobscheduler.service;
 
 import com.mobitel.jobscheduler.domain.FiredJobs;
 import com.mobitel.jobscheduler.domain.MainJobs;
+import com.mobitel.jobscheduler.domain.ServiceRequestFireTimes;
 import com.mobitel.jobscheduler.domain.ServiceRequests;
 import com.mobitel.jobscheduler.dto.FiredJobsDTO;
 import com.mobitel.jobscheduler.dto.JobsDTO;
 import com.mobitel.jobscheduler.dto.MainJobsDTO;
 import com.mobitel.jobscheduler.dto.ServiceRequestsDTO;
 import com.mobitel.jobscheduler.repository.FiredJobsRepo;
+import com.mobitel.jobscheduler.repository.ServiceRequestFireTimesRepo;
 import com.mobitel.jobscheduler.repository.ServiceRequestRepo;
 import com.mobitel.jobscheduler.util.generic.RequestHandler;
 import com.mobitel.jobscheduler.util.generic.ResponseHandler;
@@ -44,6 +46,9 @@ public class ServiceRequestService {
 
     @Autowired
     private ServiceRequestRepo serviceRequestRepo;
+
+    @Autowired
+    private ServiceRequestFireTimesRepo fireTimesRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -128,6 +133,14 @@ public class ServiceRequestService {
         serviceRequests.setSr_CREATED_ON(LocalDateTime.now());
         serviceRequests.setSr_COMMITED_DATE(LocalDateTime.now().plusHours(24));
         serviceRequestRepo.save(serviceRequests);
+
+        ServiceRequestFireTimes serviceRequestFireTimes = new ServiceRequestFireTimes();
+
+        serviceRequestFireTimes.setServiceRequestId(serviceRequests.getID());
+        serviceRequestFireTimes.setJobOneFireTime(serviceRequests.getSr_CREATED_ON());
+        serviceRequestFireTimes.setJobTwoFireTime(serviceRequests.getSr_CREATED_ON().plusMinutes(3));
+        serviceRequestFireTimes.setJobThreeFireTime(serviceRequests.getSr_CREATED_ON().plusMinutes(5));
+        fireTimesRepo.save(serviceRequestFireTimes);
 
         serviceRequestsDTOResponseHandler.setBody(modelMapper.map(serviceRequests,ServiceRequestsDTO.class));
         return serviceRequestsDTOResponseHandler;

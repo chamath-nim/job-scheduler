@@ -37,29 +37,36 @@ public class JobTwo extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
-
         List<ServiceRequests> requests = new ArrayList<>();
 
+        String classNameJobOne = "class com.mobitel.jobscheduler.util.jobs.JobOne";
+        Trigger.TriggerState state = Trigger.TriggerState.NORMAL;
+        boolean status = false;
+
         try {
-            Trigger.TriggerState state = Trigger.TriggerState.NORMAL;
-            for (TriggerKey triggerKey : scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals("group1"))) {
-                state = scheduler.getTriggerState(triggerKey);
-            }
-            if (state.equals(Trigger.TriggerState.PAUSED)){
-                List<ServiceRequests> req1 = serviceRequestRepo.findEligibleServiceRequests(0);
-                List<ServiceRequests> req2 = serviceRequestRepo.findEligibleServiceRequests(1);
+            for (String groupName : scheduler.getTriggerGroupNames()){
+                for (TriggerKey triggerKey : scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(groupName))) {
 
-                requests.addAll(req1);
-                requests.addAll(req2);
+                    Trigger trigger = scheduler.getTrigger(triggerKey);
+                    String name = String.valueOf(scheduler.getJobDetail(trigger.getJobKey()).getJobClass());
+                    if (classNameJobOne.equals(name) && state.equals(scheduler.getTriggerState(triggerKey))){
+                        status = true;
+                        break;
+                    }
+                }
             }
-            else requests = serviceRequestRepo.findEligibleServiceRequests(1);
+            if(status){
+                requests.addAll(serviceRequestRepo.findEligibleServiceRequestsCount1(1, CurrentDateTime()));
+            }
+            else{
+                requests.addAll(serviceRequestRepo.findEligibleServiceRequestsCount1(0, CurrentDateTime()));
+                requests.addAll(serviceRequestRepo.findEligibleServiceRequestsCount1(1, CurrentDateTime()));
 
+            }
         } catch (SchedulerException e) {
-            logger.error(String.valueOf(e));
+            throw new RuntimeException(e);
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        ZoneId zoneId = ZoneId.systemDefault();
 
         if (requests.size() == 0) logger.info("There is no in-progress requests in for job 2");
         else {
@@ -67,42 +74,32 @@ public class JobTwo extends QuartzJobBean {
             for (ServiceRequests sr : requests) {
                 LocalDateTime dateTime = sr.getSr_CREATED_ON();
 
-                LocalDateTime nextDateTime = dateTime.plusMinutes(3);
-                ZonedDateTime zonedDateTime = nextDateTime.atZone(zoneId);
+                LocalDateTime nextDateTime = dateTime.plusMinutes(2);
 
-                ZonedDateTime checking = ZonedDateTime.now();
+                try {
+                    FiredJobs firedJobs = new FiredJobs();
+                    firedJobs.setServiceRequestId(sr.getID());
+                    firedJobs.setStartTime(nextDateTime);
+                    firedJobs.setActualStartTime(CurrentDateTime());
 
-                if (checking.compareTo(zonedDateTime) > 0) {
+                    logger.info("job2 " + sr.getID());
 
-                    FiredJobs jobDetails = firedJobsRepo.getByJobId(sr.getID(),2);
-                    jobDetails.setActualStartTime(CurrentDateTime());
-
-                    logger.info("job2 "+sr.getID());
                     sr.setNOTIFY_COUNT(2);
                     serviceRequestRepo.save(sr);
 
-                    jobDetails.setStatus("Success");
-                    jobDetails.setEndTime(CurrentDateTime());
+                    firedJobs.setStatus("Success");
+                    firedJobs.setEndTime(CurrentDateTime());
 
-                    firedJobsRepo.save(jobDetails);
+                    firedJobsRepo.save(firedJobs);
                 }
-                else {
-                    if(firedJobsRepo.checkExist(sr.getID(), 2)==0) {
-                        FiredJobs firedJobs = new FiredJobs();
-                        firedJobs.setServiceRequestId(sr.getID());
-                        firedJobs.setNotifyCount(2);
-                        firedJobs.setStartTime(nextDateTime.format(formatter));
-                        firedJobs.setStatus("Queued");
-
-                        firedJobsRepo.save(firedJobs);
-                    }
+                catch (NullPointerException e){
+                    logger.error(String.valueOf(e));
                 }
             }
         }
     }
-    public String CurrentDateTime(){
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        return format.format(now);
+
+    public LocalDateTime CurrentDateTime(){
+        return LocalDateTime.now();
     }
 }

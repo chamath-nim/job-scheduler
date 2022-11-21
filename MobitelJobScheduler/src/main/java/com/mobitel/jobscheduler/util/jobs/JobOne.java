@@ -30,6 +30,9 @@ public class JobOne extends QuartzJobBean {
 
     Logger logger = LoggerFactory.getLogger(JobOne.class);
 
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
     @Override
     protected void executeInternal(JobExecutionContext context) {
 
@@ -47,8 +50,9 @@ public class JobOne extends QuartzJobBean {
                 FiredJobs firedJobs = new FiredJobs();
                 firedJobs.setServiceRequestId(sr.getID());
                 firedJobs.setNotifyCount(1);
-                firedJobs.setStartTime(CurrentDateTime());
+                firedJobs.setStartTime(sr.getSr_CREATED_ON());
                 firedJobs.setStatus("Success");
+
                 firedJobs.setActualStartTime(CurrentDateTime());
                 firedJobs.setEndTime(CurrentDateTime());
 
@@ -56,9 +60,7 @@ public class JobOne extends QuartzJobBean {
             }
         }
     }
-    public String CurrentDateTime(){
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        return format.format(now);
+    public LocalDateTime CurrentDateTime(){
+        return LocalDateTime.now();
     }
 }

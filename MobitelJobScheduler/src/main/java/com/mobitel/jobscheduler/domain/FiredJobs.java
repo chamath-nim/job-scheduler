@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -23,13 +24,13 @@ public class FiredJobs {
     private String status;
 
     @Column(name = "ACTUAL_START_TIME")
-    private String actualStartTime;
+    private LocalDateTime actualStartTime;
 
     @Column(name = "END_TIME")
-    private String endTime;
+    private LocalDateTime endTime;
 
-    @Column(name = "START_TIME", nullable = false)
-    private String startTime;
+    @Column(name = "START_TIME")
+    private LocalDateTime startTime;
 
     @Column(name = "NOTIFY_COUNT", nullable = false)
     private int notifyCount;
