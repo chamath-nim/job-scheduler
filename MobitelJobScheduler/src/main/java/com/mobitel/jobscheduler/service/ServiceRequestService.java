@@ -5,7 +5,6 @@ import com.mobitel.jobscheduler.domain.MainJobs;
 import com.mobitel.jobscheduler.domain.ServiceRequestFireTimes;
 import com.mobitel.jobscheduler.domain.ServiceRequests;
 import com.mobitel.jobscheduler.dto.FiredJobsDTO;
-import com.mobitel.jobscheduler.dto.JobsDTO;
 import com.mobitel.jobscheduler.dto.MainJobsDTO;
 import com.mobitel.jobscheduler.dto.ServiceRequestsDTO;
 import com.mobitel.jobscheduler.repository.FiredJobsRepo;
@@ -22,18 +21,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
 
 @Service
 public class ServiceRequestService {
@@ -55,7 +51,7 @@ public class ServiceRequestService {
 
     Logger logger = LoggerFactory.getLogger(ServiceRequestService.class);
 
-    public ResponseHandler<String> deleteJob(RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> deleteJob(RequestHandler<MainJobsDTO> jobDTORequestHandler){
         ResponseHandler<String> jobDTOResponseHandler = new ResponseHandler<>();
 
         String jobGroup = jobDTORequestHandler.getBody().getJobGroup();
@@ -72,7 +68,7 @@ public class ServiceRequestService {
         return jobDTOResponseHandler;
     }
 
-    public ResponseHandler<String> pauseTrigger(RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> pauseTrigger(RequestHandler<MainJobsDTO> jobDTORequestHandler){
         ResponseHandler<String> jobDTOResponseHandler = new ResponseHandler<>();
 
         String triggerGroup = jobDTORequestHandler.getBody().getTriggerGroup();
@@ -89,7 +85,7 @@ public class ServiceRequestService {
         return jobDTOResponseHandler;
     }
 
-    public ResponseHandler<String> resumeTrigger(RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> resumeTrigger(RequestHandler<MainJobsDTO> jobDTORequestHandler){
         ResponseHandler<String> jobDTOResponseHandler = new ResponseHandler<>();
 
         String triggerGroup = jobDTORequestHandler.getBody().getTriggerGroup();
@@ -163,9 +159,7 @@ public class ServiceRequestService {
         List<MainJobs> jobs = new ArrayList<>();
         try {
             for (String groupName : scheduler.getTriggerGroupNames()) {
-                if (!groupName.equals("jobST")) {
                     MainJobs mainJobs = new MainJobs();
-
                     for (TriggerKey triggerKey : scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(groupName))) {
                         Trigger trigger = scheduler.getTrigger(triggerKey);
 
@@ -177,11 +171,12 @@ public class ServiceRequestService {
 
                         mainJobs.setTriggerDescription(trigger.getDescription());
 
-                        mainJobs.setNextFireTime(ConvetMilliSecToDate(trigger.getNextFireTime().getTime()));
+                        mainJobs.setNextFireTime(convertToLocalDateTime(ConvetMilliSecToDate(trigger.getNextFireTime().getTime())));
 
-                        Date preTime;
+                        LocalDateTime preTime;
                         try {
-                            preTime = ConvetMilliSecToDate(trigger.getPreviousFireTime().getTime());
+                            Date Time = ConvetMilliSecToDate(trigger.getPreviousFireTime().getTime());
+                            preTime = convertToLocalDateTime(Time);
                         }
                         catch (NullPointerException e){
                             preTime = null;
@@ -189,7 +184,7 @@ public class ServiceRequestService {
 
                         mainJobs.setPreviousFireTime(preTime);
 
-                        mainJobs.setStartTime(ConvetMilliSecToDate(trigger.getStartTime().getTime()));
+                        mainJobs.setStartTime(convertToLocalDateTime(ConvetMilliSecToDate(trigger.getStartTime().getTime())));
 
                         mainJobs.setJobName(trigger.getJobKey().getName());
 
@@ -207,7 +202,6 @@ public class ServiceRequestService {
                         mainJobs.setJobClassName(String.valueOf(scheduler.getJobDetail(trigger.getJobKey()).getJobClass()));
                     }
                     jobs.add(mainJobs);
-                }
             }
         }
         catch (SchedulerException e){
@@ -223,5 +217,11 @@ public class ServiceRequestService {
 
     public Date ConvetMilliSecToDate(Long milliSec){
         return new Date(milliSec);
+    }
+
+    public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

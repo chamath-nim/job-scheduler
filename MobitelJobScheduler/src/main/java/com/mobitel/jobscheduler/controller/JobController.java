@@ -2,7 +2,6 @@ package com.mobitel.jobscheduler.controller;
 
 import com.mobitel.jobscheduler.CommonUrl;
 import com.mobitel.jobscheduler.dto.FiredJobsDTO;
-import com.mobitel.jobscheduler.dto.JobsDTO;
 import com.mobitel.jobscheduler.dto.MainJobsDTO;
 import com.mobitel.jobscheduler.dto.ServiceRequestsDTO;
 import com.mobitel.jobscheduler.service.MainJobsService;
@@ -29,7 +28,7 @@ public class JobController {
     }
 
     @PostMapping(CommonUrl.deleteJob)
-    public ResponseHandler<String> deleteJob(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> deleteJob(@RequestBody RequestHandler<MainJobsDTO> jobDTORequestHandler){
         return serviceRequestService.deleteJob(jobDTORequestHandler);
     }
 
@@ -39,18 +38,18 @@ public class JobController {
     }
 
     @PostMapping(CommonUrl.pauseTrigger)
-    public ResponseHandler<String> pauseTrigger(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> pauseTrigger(@RequestBody RequestHandler<MainJobsDTO> jobDTORequestHandler){
         return serviceRequestService.pauseTrigger(jobDTORequestHandler);
     }
 
     @PostMapping(CommonUrl.resumeTrigger)
-    public ResponseHandler<String> resumeTrigger(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> resumeTrigger(@RequestBody RequestHandler<MainJobsDTO> jobDTORequestHandler){
         return serviceRequestService.resumeTrigger(jobDTORequestHandler);
 
     }
 
     @PostMapping(CommonUrl.addJob)
-    public ResponseHandler<String> addJob(@RequestBody RequestHandler<JobsDTO> jobDTORequestHandler){
+    public ResponseHandler<String> addJob(@RequestBody RequestHandler<MainJobsDTO> jobDTORequestHandler){
         return mainJobsService.mainScheduler(jobDTORequestHandler);
     }
 

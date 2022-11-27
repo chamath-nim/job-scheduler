@@ -2,7 +2,7 @@ package com.mobitel.jobscheduler.domain;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class MainJobs {
@@ -16,8 +16,15 @@ public class MainJobs {
     private String triggerType;
     private String jobClassName;
     private String cronExpression;
-    private Date nextFireTime;
-    private Date previousFireTime;
-    private Date startTime;
+    private LocalDateTime nextFireTime;
+    private LocalDateTime previousFireTime;
+    private LocalDateTime startTime;
+    
+    private LocalDateTime scheduledStart;
+    private LocalDateTime scheduledEnd;
 
+    private boolean repeating;
+    private String repeatUnit;
+    private int repeatInterval;
+    private int repetitions;
 }

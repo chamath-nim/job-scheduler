@@ -52,26 +52,6 @@ public class ServiceRequests {
 //    @Column(name = "SR_CUST_NOTIFY_OPEN")
 //    private int SR_CUST_NOTIFY_OPEN;
 //
-//    @Column(name = "SR_FIELD1")
-//    private String SR_FIELD1;
-//
-//    @Column(name = "SR_FIELD2")
-//    private String SR_FIELD2;
-//
-//    @Column(name = "SR_FIELD3")
-//    private String SR_FIELD3;
-//
-//    @Column(name = "SR_FIELD4")
-//    private String SR_FIELD4;
-//
-//    @Column(name = "SR_FIELD5")
-//    private String SR_FIELD5;
-//
-//    @Column(name = "SR_FIELD6")
-//    private Long SR_FIELD6;
-//
-//    @Column(name = "SR_FTR")
-//    private int SR_FTR;
 //
 //    @Column(name = "SR_LAST_UPDATED_BY")
 //    private String SR_LAST_UPDATED_BY;
@@ -82,9 +62,6 @@ public class ServiceRequests {
     @Column(name = "SR_MOBILE_NO")
     private String sr_MOBILE_NO;
 
-//    @Column(name = "SR_NON_FTR")
-//    private int SR_NON_FTR;
-
     @Column(name = "SR_NOTIFICATION_EMAIL")
     private String sr_NOTIFICATION_EMAIL;
 
@@ -94,9 +71,6 @@ public class ServiceRequests {
 //    @Column(name = "SR_NOTIFICATION_MOBILE_NO")
 //    private String SR_NOTIFICATION_MOBILE_NO;
 
-//    @Column(name = "SR_NUM")
-//    private String SR_NUM;
-//
 //    @Column(name = "SR_OPENING_COMMENT")
 //    private String SR_OPENING_COMMENT;
 
@@ -105,21 +79,6 @@ public class ServiceRequests {
 
     @Column(name = "SR_OWNER_GROUP")
     private String sr_OWNER_GROUP;
-
-//    @Column(name = "SR_PRIORITY")
-//    private String SR_PRIORITY;
-//
-//    @Column(name = "SR_PURGED_DATE")
-//    private String SR_PURGED_DATE;
-//
-//    @Column(name = "SR_READY_TO_PURGE")
-//    private int SR_READY_TO_PURGE;
-//
-//    @Column(name = "SR_SEVERITY")
-//    private String SR_SEVERITY;
-//
-//    @Column(name = "SR_SOURCE")
-//    private String SR_SOURCE;
 
     @Column(name = "SR_STATUS")
     private String sr_STATUS;
@@ -132,9 +91,6 @@ public class ServiceRequests {
 
     @Column(name = "SR_COMMITED_DATE")
     private LocalDateTime sr_COMMITED_DATE;
-
-//    @Column(name = "SR_WEIGHTAGE_FACTOR")
-//    private String SR_WEIGHTAGE_FACTOR;
 
 
 }
